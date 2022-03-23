@@ -1,0 +1,11 @@
+[Unit]
+Description=Fucking Kill yourself
+
+[Service]
+User=root
+ExecStartPre=/bin/sleep 60
+ExecStart=/bin/bash -c "/home/pi/akshat/emergency_shutdown.sh >> /home/pi/logs/suicidelog"
+
+[Install]
+WantedBy=multi-user.target
+

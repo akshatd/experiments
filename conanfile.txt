@@ -1,0 +1,13 @@
+[requires]
+spdlog/[>=1.9.2]
+easyloggingpp/[>=9.97.0]
+nlohmann_json/[>=3.10.5]
+
+[generators]
+cmake
+
+[options]
+easyloggingpp:enable_crash_log=True
+easyloggingpp:enable_thread_safe=True
+easyloggingpp:enable_debug_errors=True
+easyloggingpp:enable_default_logfile=False
