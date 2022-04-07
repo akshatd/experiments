@@ -6,6 +6,7 @@ project(experiments)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-psabi")
 
 # set up deps vis conan. CMAKE_BINARY_DIR=the build folder
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
@@ -37,3 +38,5 @@ target_link_libraries(json-test CONAN_PKG::nlohmann_json)
 
 add_executable(spdlog-test ${SRC_DIR}/spdlog-test.cc)
 target_link_libraries(spdlog-test CONAN_PKG::spdlog)
+
+add_executable(invertigo ${SRC_DIR}/invertigo.cc)
