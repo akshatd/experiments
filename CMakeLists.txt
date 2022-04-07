@@ -37,6 +37,6 @@ add_executable(json-test ${SRC_DIR}/json-test.cc)
 target_link_libraries(json-test CONAN_PKG::nlohmann_json)
 
 add_executable(spdlog-test ${SRC_DIR}/spdlog-test.cc)
-target_link_libraries(spdlog-test CONAN_PKG::spdlog)
+target_link_libraries(spdlog-test CONAN_PKG::spdlog CONAN_PKG::nlohmann_json)
 
 add_executable(invertigo ${SRC_DIR}/invertigo.cc)
