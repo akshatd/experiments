@@ -33,10 +33,7 @@ target_link_libraries(chrono-test chrono-wrapper)
 add_executable(easylogging-test ${SRC_DIR}/easylogging-test.cc)
 target_link_libraries(easylogging-test logging CONAN_PKG::easyloggingpp)
 
-add_executable(json-test ${SRC_DIR}/json-test.cc)
-target_link_libraries(json-test CONAN_PKG::nlohmann_json)
-
 add_executable(spdlog-test ${SRC_DIR}/spdlog-test.cc)
-target_link_libraries(spdlog-test CONAN_PKG::spdlog CONAN_PKG::nlohmann_json)
+target_link_libraries(spdlog-test logging CONAN_PKG::spdlog CONAN_PKG::nlohmann_json)
 
 add_executable(invertigo ${SRC_DIR}/invertigo.cc)

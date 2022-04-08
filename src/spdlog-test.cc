@@ -2,21 +2,26 @@
 #include <string>
 #include <variant>
 
-#include <spdlog/spdlog.h>
 #include <nlohmann/json.hpp>
+#include <spdlog/spdlog.h>
+
+#include "json-log.h"
 
 // nlohman json adds curly braces, so remove those
-#define JSON_STRING(json) (json.dump().substr(1, json.dump().length() - 2))
+#define JSON_STRING(json) (", " + json.dump().substr(1, json.dump().length() - 2))
 
 int main(void) {
 	nlohmann::json whatever = {
 		{"pi", 3.141},
 	};
 	whatever["poop"] = "train";
+	JsonLog whatever2({{"pi", 3.141}, {"poop", "train"}});
+
+	std::cout << "raw jsons: " << whatever << ", " << whatever2 << '\n';
 
 	spdlog::info("Welcome to spdlog!");
 	// change log pattern
-	spdlog::set_pattern("%^{\"datetime\":\"%Y-%m-%dT%H:%M:%S.%e\" , %v}%$");
+	spdlog::set_pattern("%^{\"datetime\":\"%Y-%m-%dT%H:%M:%S.%e\" %v}%$");
 	spdlog::error("Some error message with arg: {}", 1);
 	spdlog::warn("Easy padding in numbers like {:08d}", 12);
 	spdlog::critical("Support for int: {0:d};  hex: {0:x};  oct: {0:o}; bin: {0:b}", 42);
@@ -24,6 +29,8 @@ int main(void) {
 	spdlog::info("Positional args are {1} {0}..", "too", "supported");
 	spdlog::info("{:<30}", "left aligned");
 	spdlog::info(JSON_STRING(whatever));
+	spdlog::info(whatever2);
+	spdlog::warn(JsonLog({{"fuck", 69}, {"you", true}}));
 
 	spdlog::set_level(spdlog::level::debug); // Set global log level to debug
 	spdlog::debug("This message should be displayed..");
