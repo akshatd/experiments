@@ -1,21 +1,26 @@
 #include <iostream>
 #include <string>
 #include <variant>
+#include <cstdint>
 
 #include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
 
-#include "json-log.h"
+#include "jsonlog.h"
 
 // nlohman json adds curly braces, so remove those
 #define JSON_STRING(json) (", " + json.dump().substr(1, json.dump().length() - 2))
 
 int main(void) {
+	int            hmm      = 34;
 	nlohmann::json whatever = {
 		{"pi", 3.141},
 	};
 	whatever["poop"] = "train";
-	JsonLog whatever2({{"pi", 3.141}, {"poop", "train"}});
+	JsonLog whatever2({
+		{  "pi", 3.141},
+    {"poop",   hmm}
+  });
 
 	std::cout << "raw jsons: " << whatever << ", " << whatever2 << '\n';
 
@@ -30,7 +35,10 @@ int main(void) {
 	spdlog::info("{:<30}", "left aligned");
 	spdlog::info(JSON_STRING(whatever));
 	spdlog::info(whatever2);
-	spdlog::warn(JsonLog({{"fuck", 69}, {"you", true}}));
+	spdlog::warn(JsonLog({
+		{"fuck",   69},
+    { "you", true}
+  }));
 
 	spdlog::set_level(spdlog::level::debug); // Set global log level to debug
 	spdlog::debug("This message should be displayed..");

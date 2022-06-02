@@ -1,19 +1,19 @@
 #include <iostream>
 
 class Destroyer {
- private:
-	/* data */
+	private:
+		/* data */
 
- public:
-	Destroyer(/* args */);
-	~Destroyer();
+	public:
+		Destroyer(/* args */);
+		~Destroyer();
 };
 
 Destroyer::Destroyer(/* args */) {}
 
 Destroyer::~Destroyer() { std::cout << "destroying~\n"; }
 
-int main(int argc, char const *argv[]) {
+int main(void) {
 	Destroyer d;
 	d.~Destroyer();
 	return 0;

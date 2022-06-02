@@ -1,7 +1,10 @@
 [requires]
 spdlog/[>=1.9.2]
+fmt/[>=8.1.1]
 easyloggingpp/[>=9.97.0]
 nlohmann_json/[>=3.10.5]
+rpclib/[>=2.3.0]
+catch2/[>=2.13.9]
 
 [generators]
 cmake
@@ -11,3 +14,5 @@ easyloggingpp:enable_crash_log=True
 easyloggingpp:enable_thread_safe=True
 easyloggingpp:enable_debug_errors=True
 easyloggingpp:enable_default_logfile=False
+catch2:with_main=True
+catch2:with_benchmark=True

@@ -15,6 +15,7 @@ conan_basic_setup(TARGETS)
 # setup some vars
 set(SRC_DIR src)
 set(INCLUDE_DIR include)
+set(TEST_DIR test)
 
 #interface libraries
 # https://cmake.org/cmake/help/latest/command/add_library.html#interface-libraries
@@ -23,6 +24,7 @@ target_include_directories(chrono-wrapper INTERFACE ${INCLUDE_DIR}/chrono-wrappe
 
 add_library(logging INTERFACE ${INCLUDE_DIR})
 target_include_directories(logging INTERFACE ${INCLUDE_DIR}/logging)
+target_link_libraries(logging INTERFACE CONAN_PKG::fmt)
 
 # executables
 add_executable(destructor-test ${SRC_DIR}/destructor-test.cc)
@@ -37,3 +39,15 @@ add_executable(spdlog-test ${SRC_DIR}/spdlog-test.cc)
 target_link_libraries(spdlog-test logging CONAN_PKG::spdlog CONAN_PKG::nlohmann_json)
 
 add_executable(invertigo ${SRC_DIR}/invertigo.cc)
+
+add_executable(rpclib-server ${SRC_DIR}/rpclib-server.cc)
+target_link_libraries(rpclib-server logging CONAN_PKG::spdlog CONAN_PKG::rpclib)
+
+add_executable(rpclib-client ${SRC_DIR}/rpclib-client.cc)
+target_link_libraries(rpclib-client logging CONAN_PKG::spdlog CONAN_PKG::rpclib)
+
+include(Catch)
+
+add_executable(jsonlog-test ${TEST_DIR}/jsonlog-test.cc)
+target_link_libraries(jsonlog-test PRIVATE logging CONAN_PKG::catch2)
+catch_discover_tests(jsonlog-test)

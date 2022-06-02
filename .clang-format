@@ -33,7 +33,7 @@ SpaceBeforeCpp11BracedList: false
 #   Maximum=1
 
 AlignAfterOpenBracket: AlwaysBreak
-# AlignArrayOfStructures: Right # clang-format 13
+AlignArrayOfStructures: Right # clang-format 13
 AlignConsecutiveAssignments: Consecutive
 AlignConsecutiveBitFields: AcrossEmptyLinesAndComments
 AlignConsecutiveDeclarations: Consecutive
