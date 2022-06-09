@@ -46,6 +46,9 @@ target_link_libraries(rpclib-server logging CONAN_PKG::spdlog CONAN_PKG::rpclib)
 add_executable(rpclib-client ${SRC_DIR}/rpclib-client.cc)
 target_link_libraries(rpclib-client logging CONAN_PKG::spdlog CONAN_PKG::rpclib)
 
+add_executable(fmt-progress ${SRC_DIR}/fmt-progress.cc)
+target_link_libraries(fmt-progress CONAN_PKG::fmt)
+
 include(Catch)
 
 add_executable(jsonlog-test ${TEST_DIR}/jsonlog-test.cc)
