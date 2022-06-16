@@ -26,6 +26,9 @@ add_library(logging INTERFACE ${INCLUDE_DIR})
 target_include_directories(logging INTERFACE ${INCLUDE_DIR}/logging)
 target_link_libraries(logging INTERFACE CONAN_PKG::fmt)
 
+add_library(functest INTERFACE)
+target_include_directories(functest INTERFACE ${INCLUDE_DIR}/functest)
+
 # executables
 add_executable(destructor-test ${SRC_DIR}/destructor-test.cc)
 
@@ -48,6 +51,9 @@ target_link_libraries(rpclib-client logging CONAN_PKG::spdlog CONAN_PKG::rpclib)
 
 add_executable(fmt-progress ${SRC_DIR}/fmt-progress.cc)
 target_link_libraries(fmt-progress CONAN_PKG::fmt)
+
+add_executable(functestmain ${SRC_DIR}/functestmain.cc)
+target_link_libraries(functestmain PRIVATE functest)
 
 include(Catch)
 
