@@ -75,7 +75,9 @@
 		"typeinfo": "cpp",
 		"valarray": "cpp",
 		"variant": "cpp",
-		"source_location": "cpp"
+		"source_location": "cpp",
+		"charconv": "cpp",
+		"regex": "cpp"
 	},
 	"cmake.configureOnOpen": true
 }

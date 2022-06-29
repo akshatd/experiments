@@ -53,7 +53,13 @@ add_executable(fmt-progress ${SRC_DIR}/fmt-progress.cc)
 target_link_libraries(fmt-progress CONAN_PKG::fmt)
 
 add_executable(functestmain ${SRC_DIR}/functestmain.cc)
-target_link_libraries(functestmain PRIVATE functest)
+target_link_libraries(functestmain functest)
+
+add_executable(sockpp-tcp-server ${SRC_DIR}/sockpp-tcp-server.cc)
+target_link_libraries(sockpp-tcp-server CONAN_PKG::sockpp CONAN_PKG::fmt)
+
+add_executable(sockpp-tcp-client ${SRC_DIR}/sockpp-tcp-client.cc)
+target_link_libraries(sockpp-tcp-client CONAN_PKG::sockpp)
 
 include(Catch)
 
