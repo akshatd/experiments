@@ -61,6 +61,12 @@ target_link_libraries(sockpp-tcp-server CONAN_PKG::sockpp CONAN_PKG::fmt)
 add_executable(sockpp-tcp-client ${SRC_DIR}/sockpp-tcp-client.cc)
 target_link_libraries(sockpp-tcp-client CONAN_PKG::sockpp)
 
+add_executable(asio-tcp-server ${SRC_DIR}/asio-tcp-server.cc)
+target_link_libraries(asio-tcp-server CONAN_PKG::asio)
+
+add_executable(asio-tcp-client ${SRC_DIR}/asio-tcp-client.cc)
+target_link_libraries(asio-tcp-client CONAN_PKG::asio)
+
 include(Catch)
 
 add_executable(jsonlog-test ${TEST_DIR}/jsonlog-test.cc)
