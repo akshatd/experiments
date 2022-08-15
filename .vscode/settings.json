@@ -77,7 +77,11 @@
 		"variant": "cpp",
 		"source_location": "cpp",
 		"charconv": "cpp",
-		"regex": "cpp"
+		"regex": "cpp",
+		"coroutine": "cpp",
+		"ranges": "cpp",
+		"span": "cpp",
+		"typeindex": "cpp"
 	},
 	"cmake.configureOnOpen": true
 }

@@ -11,7 +11,7 @@
 // #include <spdlog/fmt/ostr.h>, but this internall just includes the fmt header
 #include <fmt/ostream.h>
 
-#define JSONLOG_SPDLOG_PATTERN "%^{\"datetime\":\"%Y-%m-%dT%H:%M:%S.%e\" %v}%$"
+#define JSONLOG_SPDLOG_PATTERN "%^{\"datetime\":\"%Y-%m-%dT%H:%M:%S.%e\" , %v}%$"
 
 // helper type for the variant visitor
 // https://en.cppreference.com/w/cpp/utility/variant/visit
