@@ -7,6 +7,8 @@ rpclib/[>=2.3.0]
 catch2/[>=3.1.0]
 asio/[>=1.22.1]
 sockpp/v0.7.1@tctl/dev
+sdbus-cpp/[>=1.2.0]
+cli11/[>=2.2.0]
 
 [generators]
 cmake

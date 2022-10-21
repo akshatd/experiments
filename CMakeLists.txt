@@ -88,6 +88,9 @@ target_link_libraries(asio-tcp-server CONAN_PKG::asio)
 add_executable(asio-tcp-client ${SRC_DIR}/asio-tcp-client.cc)
 target_link_libraries(asio-tcp-client CONAN_PKG::asio)
 
+add_executable(systemctl-cli ${SRC_DIR}/systemctl-cli.cc)
+target_link_libraries(systemctl-cli CONAN_PKG::sdbus-cpp CONAN_PKG::fmt CONAN_PKG::cli11)
+
 include(Catch)
 
 add_executable(jsonlog-test ${TEST_DIR}/jsonlog-test.cc)
