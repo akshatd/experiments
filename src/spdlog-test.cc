@@ -45,10 +45,10 @@ int main(void) {
 		{"fuck",   69},
     { "you", true}
   }));
-	spdlog::warn(JsonLog({
-		{"fuck",   69},
-    { "you", true}
-  }));
+	// spdlog::warn(JsonLog({
+	// 	{"fuck",   69},
+	//   { "you", true}
+	// }));
 	int iter = 100000;
 	spdlog::info("json");
 	auto start = std::chrono::high_resolution_clock::now();
@@ -62,7 +62,7 @@ int main(void) {
 	spdlog::info("jsonlog");
 	start = std::chrono::high_resolution_clock::now();
 	for (int i = 0; i < iter; ++i) {
-		spdlog::info(some_jsonlog);
+		// spdlog::info(some_jsonlog);
 	}
 	auto jsonlog_spent =
 		std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);

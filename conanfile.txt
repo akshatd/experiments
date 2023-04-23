@@ -1,14 +1,14 @@
 [requires]
-spdlog/[>=1.10.0]
-fmt/8.1.1
+spdlog/[>=1.11.0]
+fmt/[>=9.1.0]
 easyloggingpp/[>=9.97.0]
-nlohmann_json/[>=3.11.1]
+nlohmann_json/[>=3.11.2]
 rpclib/[>=2.3.0]
-catch2/[>=3.1.0]
-asio/[>=1.22.1]
+catch2/[>=3.3.2]
+asio/[>=1.27.0]
 sockpp/v0.7.1@tctl/dev
 sdbus-cpp/[>=1.2.0]
-cli11/[>=2.2.0]
+cli11/[>=2.3.2]
 
 [generators]
 cmake
