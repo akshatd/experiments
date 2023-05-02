@@ -9,6 +9,7 @@ asio/[>=1.27.0]
 sockpp/v0.7.1@tctl/dev
 sdbus-cpp/[>=1.2.0]
 cli11/[>=2.3.2]
+eigen/[>=3.4.0 ]
 
 [generators]
 cmake

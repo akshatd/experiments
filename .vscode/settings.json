@@ -81,7 +81,9 @@
 		"coroutine": "cpp",
 		"ranges": "cpp",
 		"span": "cpp",
-		"typeindex": "cpp"
+		"typeindex": "cpp",
+		"nonlinearoptimization": "cpp",
+		"levenbergmarquardt": "cpp"
 	},
 	"cmake.configureOnOpen": true
 }
