@@ -66,9 +66,9 @@ struct FittingResult {
 		double                                 mean_x_fit;
 		double                                 mean_y_fit;
 		double                                 std_fit;
-		int                                    k_iters;
-		int                                    k_f_evals;
-		int                                    k_j_evals;
+		Eigen::Index                           k_iters;
+		Eigen::Index                           k_f_evals;
+		Eigen::Index                           k_j_evals;
 		double                                 norm_vector;
 		double                                 norm_grad_error;
 };
@@ -76,7 +76,7 @@ struct FittingResult {
 FittingResult FitGaussian1d(Eigen::Matrix<double, Eigen::Dynamic, 2> &data) {
 	// Initial guess for Gaussian parameters
 	Eigen::VectorXd guess(3);
-	int             row_max;
+	Eigen::Index    row_max;
 	guess(0) = data.col(1).maxCoeff(&row_max); // amplitude_guess
 	guess(1) = data(row_max, 0);               // mean_guess
 	guess(2) = 1;                              // std_guess
@@ -96,7 +96,7 @@ FittingResult FitGaussian1d(Eigen::Matrix<double, Eigen::Dynamic, 2> &data) {
 FittingResult FitGaussian2d(Eigen::Matrix<double, Eigen::Dynamic, 3> &data) {
 	// Initial guess for Gaussian parameters
 	Eigen::VectorXd guess(4);
-	int             row_max;
+	Eigen::Index    row_max;
 	guess(0) = data.col(2).maxCoeff(&row_max); // amplitude_guess
 	guess(1) = data(row_max, 0);               // mean_x_guess
 	guess(2) = data(row_max, 1);               // mean_y_guess
