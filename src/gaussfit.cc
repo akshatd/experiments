@@ -141,23 +141,22 @@ int main() {
 	constexpr int width  = 20;
 	constexpr int height = 20;
 
-	Eigen::Matrix<double, Eigen::Dynamic, 3> data_2d(width * height, 3);
-
-	constexpr double A     = 10.0;
-	constexpr double x0    = width / 2.5;
-	constexpr double y0    = height / 2.0;
-	constexpr double sigma = 5.0;
+	std::vector<double> data_vec;
+	constexpr double    A     = 10.0;
+	constexpr double    x0    = width / 2.5;
+	constexpr double    y0    = height / 2.0;
+	constexpr double    sigma = 5.0;
 
 	for (int h = 0; h < height; ++h) {
 		for (int w = 0; w < width; ++w) {
-			int index         = (h * height) + w;
-			data_2d(index, 0) = h;
-			data_2d(index, 1) = w;
-			data_2d(index, 2) = Gaussian2d(data_2d(index, 0), data_2d(index, 1), A, x0, y0, sigma) +
-			                    0.05 * (static_cast<double>(rand()) / (double)RAND_MAX);
+			int index = (h * height) + w;
+			data_vec.insert(
+				data_vec.end(), {(double)h, (double)w,
+			                   Gaussian2d(h, w, A, x0, y0, sigma) + 0.05 * (static_cast<double>(rand()) / (double)RAND_MAX)});
 		}
 	}
-
+	Eigen::Matrix<double, Eigen::Dynamic, 3> data_2d =
+		Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, 3, Eigen::RowMajor>>(data_vec.data(), data_vec.size() / 3, 3);
 	FittingResult result_2d = FitGaussian2d(data_2d);
 	fmt::print(
 		"Status: {}\namp: {}\nmean_x: {}\nmean_y: {}\nstd: {}\niters: {}\nf evals: {}\nj evals: {}\nnorm vector: {}\nnorm "
