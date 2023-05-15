@@ -1,6 +1,6 @@
 [requires]
 spdlog/[>=1.11.0]
-fmt/[>=9.1.0]
+fmt/9.1.0
 easyloggingpp/[>=9.97.0]
 nlohmann_json/[>=3.11.2]
 rpclib/[>=2.3.0]

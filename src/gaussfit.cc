@@ -60,6 +60,10 @@ struct GaussianFunctor2d : Eigen::DenseFunctor<double> {
 		// df() that implements the jacobian matrix will be added by NumericalDiff
 };
 
+struct ValidationResult {
+		bool has_pwr_diff;
+};
+
 struct FittingResult {
 		Eigen::LevenbergMarquardtSpace::Status status;
 		double                                 amplitude_fit;
@@ -71,6 +75,17 @@ struct FittingResult {
 		Eigen::Index                           k_j_evals;
 		double                                 norm_vector;
 		double                                 norm_grad_error;
+};
+
+struct FitAnalysis {
+		double r_sq;
+		double error_sq;
+};
+
+struct ScanResult {
+		ValidationResult validation;
+		FittingResult    fit;
+		FitAnalysis      analysis;
 };
 
 FittingResult FitGaussian1d(Eigen::Matrix<double, Eigen::Dynamic, 2> &data) {
@@ -89,18 +104,54 @@ FittingResult FitGaussian1d(Eigen::Matrix<double, Eigen::Dynamic, 2> &data) {
 
 	// Fit the function
 	Eigen::LevenbergMarquardtSpace::Status status = optimizer.minimize(guess);
-	return {status,           guess(0),         guess(1),          guess(1),         guess(2), optimizer.iterations(),
-	        optimizer.nfev(), optimizer.njev(), optimizer.fnorm(), optimizer.gnorm()};
+
+	return {
+		status,           guess(0),         guess(1),          guess(1),          guess(2), optimizer.iterations(),
+		optimizer.nfev(), optimizer.njev(), optimizer.fnorm(), optimizer.gnorm(),
+	};
+}
+
+ValidationResult ValidateData(Eigen::Matrix<double, Eigen::Dynamic, 3> &data) {
+	if (data.col(2).minCoeff() == data.col(2).maxCoeff()) {
+		return {.has_pwr_diff = false};
+	} else {
+		return {.has_pwr_diff = true};
+	}
+}
+
+FitAnalysis AnalyseFit(
+	Eigen::Matrix<double, Eigen::Dynamic, 3> &data, double amp, double mean_x, double mean_y, double std) {
+	// finding rsquared
+	// https://www.ncl.ac.uk/webtemplate/ask-assets/external/maths-resources/statistics/regression-and-correlation/coefficient-of-determination-r-squared.html
+	Eigen::Array<double, Eigen::Dynamic, 1> real_data = data.col(2).array();
+
+	// get sum squared regression or residuals
+	Eigen::Array<double, Eigen::Dynamic, 1> residuals(data.rows(), 1);
+	for (Eigen::Index row = 0; row < data.rows(); ++row) {
+		residuals(row) = real_data(row) - Gaussian2d(data(row, 0), data(row, 1), amp, mean_x, mean_y, std);
+	}
+	double residuals_total = (residuals * residuals).sum();
+
+	// get total sum of squares
+	Eigen::Array<double, Eigen::Dynamic, 1> sum_sq       = real_data - real_data.mean();
+	double                                  sum_sq_total = (sum_sq * sum_sq).sum();
+
+	// final metrics
+	double r_sq     = 1 - (residuals_total / sum_sq_total);
+	double error_sq = residuals_total / data.rows();
+
+	return {r_sq, error_sq};
 }
 
 FittingResult FitGaussian2d(Eigen::Matrix<double, Eigen::Dynamic, 3> &data) {
 	// Initial guess for Gaussian parameters
 	Eigen::VectorXd guess(4);
 	Eigen::Index    row_max;
-	guess(0) = data.col(2).maxCoeff(&row_max); // amplitude_guess
-	guess(1) = data(row_max, 0);               // mean_x_guess
-	guess(2) = data(row_max, 1);               // mean_y_guess
-	guess(3) = 1;                              // std_guess
+	double          pwr_max = data.col(2).maxCoeff(&row_max);
+	guess(0)                = pwr_max;          // amplitude guess
+	guess(1)                = data(row_max, 0); // mean_x guess
+	guess(2)                = data(row_max, 1); // mean_y guess
+	guess(3)                = 1;                // std guess
 	fmt::print("Guess: {}, {}, {}, {}\n", guess(0), guess(1), guess(2), guess(3));
 
 	// Add the df() method using NumericalDiff
@@ -110,8 +161,11 @@ FittingResult FitGaussian2d(Eigen::Matrix<double, Eigen::Dynamic, 3> &data) {
 
 	// Fit the function
 	Eigen::LevenbergMarquardtSpace::Status status = optimizer.minimize(guess);
-	return {status,           guess(0),         guess(1),          guess(2),         guess(3), optimizer.iterations(),
-	        optimizer.nfev(), optimizer.njev(), optimizer.fnorm(), optimizer.gnorm()};
+
+	return {
+		status,           guess(0),         guess(1),          guess(2),          guess(3), optimizer.iterations(),
+		optimizer.nfev(), optimizer.njev(), optimizer.fnorm(), optimizer.gnorm(),
+	};
 }
 
 int main() {
@@ -131,8 +185,9 @@ int main() {
 	}
 	FittingResult result_1d = FitGaussian1d(data_1d);
 	fmt::print(
-		"Status: {}\namp: {}\nmean_x: {}\nmean_y: {}\nstd: {}\niters: {}\nf evals: {}\nj evals: {}\nnorm vector: {}\nnorm "
-		"grad error: {}\n",
+		"status: {}\namp: {}\nmean_x: {}\nmean_y: {}\nstd: {}\niters: {}\nf evals: {}\nj evals: {}\nnorm "
+		"vector: "
+		"{}\nnorm grad error: {}\n",
 		result_1d.status, result_1d.amplitude_fit, result_1d.mean_x_fit, result_1d.mean_y_fit, result_1d.std_fit,
 		result_1d.k_iters, result_1d.k_f_evals, result_1d.k_j_evals, result_1d.norm_vector, result_1d.norm_grad_error);
 
@@ -149,20 +204,28 @@ int main() {
 
 	for (int h = 0; h < height; ++h) {
 		for (int w = 0; w < width; ++w) {
-			int index = (h * height) + w;
 			data_vec.insert(
-				data_vec.end(), {(double)h, (double)w,
-			                   Gaussian2d(h, w, A, x0, y0, sigma) + 0.05 * (static_cast<double>(rand()) / (double)RAND_MAX)});
+				data_vec.end(),
+				{static_cast<double>(h), static_cast<double>(w),
+			   Gaussian2d(h, w, A, x0, y0, sigma) + 0.05 * (static_cast<double>(rand()) / static_cast<double>(RAND_MAX))});
 		}
 	}
 	Eigen::Matrix<double, Eigen::Dynamic, 3> data_2d =
 		Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, 3, Eigen::RowMajor>>(data_vec.data(), data_vec.size() / 3, 3);
+	ValidationResult validation = ValidateData(data_2d);
+	fmt::print(" -- Validation -- \nhas_pwr_diff: {}\n", validation.has_pwr_diff);
+
 	FittingResult result_2d = FitGaussian2d(data_2d);
 	fmt::print(
-		"Status: {}\namp: {}\nmean_x: {}\nmean_y: {}\nstd: {}\niters: {}\nf evals: {}\nj evals: {}\nnorm vector: {}\nnorm "
-		"grad error: {}\n",
+		" -- Fitting -- \nstatus: {}\namp: {}\nmean_x: {}\nmean_y: {}\nstd: {}\niters: {}\nf evals: {}\nj evals: {}\nnorm "
+		"vector: {}\nnorm grad error: {}\n",
 		result_2d.status, result_2d.amplitude_fit, result_2d.mean_x_fit, result_2d.mean_y_fit, result_2d.std_fit,
 		result_2d.k_iters, result_2d.k_f_evals, result_2d.k_j_evals, result_2d.norm_vector, result_2d.norm_grad_error);
+
+	// Analyse the fit
+	FitAnalysis analysis =
+		AnalyseFit(data_2d, result_2d.amplitude_fit, result_2d.mean_x_fit, result_2d.mean_y_fit, result_2d.std_fit);
+	fmt::print(" -- Analysis -- \nerr_sq: {}\nr_sq: {}\n", analysis.error_sq, analysis.r_sq);
 
 	return 0;
 }
