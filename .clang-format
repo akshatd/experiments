@@ -8,7 +8,7 @@ TabWidth: 2
 ContinuationIndentWidth: 2
 UseTab: AlignWithSpaces
 
-# ReferenceAlignment: Right # clang-format 14
+ReferenceAlignment: Right # clang-format 14
 PointerAlignment: Right
 
 SpaceBeforeParens: ControlStatements
@@ -19,7 +19,7 @@ SpacesInParentheses: false
 SpacesInSquareBrackets: false
 SpaceInEmptyBlock: false
 SpaceInEmptyParentheses: false
-# SpacesInAngles: Never # clang-format 14
+SpacesInAngles: Never # clang-format 14
 SpacesInCStyleCastParentheses: false
 SpacesBeforeTrailingComments: 1
 SpaceAfterCStyleCast: false
@@ -28,9 +28,9 @@ SpaceAfterTemplateKeyword: false
 SpaceBeforeCaseColon: false
 SpaceBeforeAssignmentOperators: true
 SpaceBeforeCpp11BracedList: false
-# SpacesInLineCommentPrefix: # clang-format 14
-#   Minimum=1
-#   Maximum=1
+SpacesInLineCommentPrefix: # clang-format 14
+  Minimum: 1
+  Maximum: 1
 
 AlignAfterOpenBracket: AlwaysBreak
 AlignArrayOfStructures: Right # clang-format 13
@@ -41,7 +41,7 @@ AlignConsecutiveMacros: Consecutive
 AlignEscapedNewlines: Left
 AlignTrailingComments: true
 
-# AllowShortIfStatementsOnASingleLine: AllIfsAndElse # this should work..??
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse # this should work..??
 AllowShortEnumsOnASingleLine: true
 AlwaysBreakTemplateDeclarations: Yes
 BitFieldColonSpacing: After
@@ -68,16 +68,16 @@ LambdaBodyIndentation: Signature # clang-format 13
 
 MaxEmptyLinesToKeep: 1
 
-# PackConstructorInitializers: NextLine # clang-format 14
+PackConstructorInitializers: NextLine # clang-format 14
 AllowAllConstructorInitializersOnNextLine: true
 
-# QualifierAlignment: Custom # clang-format 14
-# QualifierOrder: ['static', 'const', 'inline', 'volatile', 'type']
+QualifierAlignment: Custom # clang-format 14
+QualifierOrder: ['static', 'const', 'inline', 'volatile', 'type']
 
 ReflowComments: true
 
 SortUsingDeclarations: true
 
 # IncludeBlocks: Preserve # clang-format 14
-SortIncludes: false # page says to use Never..??
+SortIncludes: CaseInsensitive # page says to use Never..??
 ...
